@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from transformers import pipeline
+import os
 
 app = Flask(__name__)
 
@@ -18,3 +19,7 @@ def summarize():
 
     summary = summarizer(text, max_length=60, min_length=10, do_sample=False)[0]['summary_text']
     return jsonify({"summary": summary})
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
