@@ -1,10 +1,10 @@
 from flask import Flask, request, jsonify
 from transformers import pipeline
-import os
 
 app = Flask(__name__)
 
-summarizer = pipeline("summarization", model="t5-small")
+# Use a lighter model to save memory
+summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6")
 
 @app.route("/")
 def home():
@@ -19,7 +19,3 @@ def summarize():
 
     summary = summarizer(text, max_length=60, min_length=10, do_sample=False)[0]['summary_text']
     return jsonify({"summary": summary})
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
